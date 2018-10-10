@@ -20,6 +20,7 @@ describe Oystercard do
     let(:entry_station) {double :station, name: "Aldgate East", zone: 1}
     let(:exit_station) {double :station, name: "Waterloo", zone: 1}
 
+
     it "is initially not in journey" do
       expect(subject).not_to be_in_journey
     end
@@ -40,6 +41,8 @@ describe Oystercard do
     end
     it "deducts the fare when you touch out" do
       subject.top_up(5)
+      subject.touch_in(entry_station)
+      allow(subject.current_journey).to receive(:add_exit_station).with(exit_station)
       expect{subject.touch_out(exit_station)}.to change{subject.balance}.by(-Oystercard::MINIMUM_CHARGE)
     end
     it "remembers the entry station after touch in" do
