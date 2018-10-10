@@ -18,4 +18,14 @@ describe Journey do
     journey.add_exit_station(exit_station)
     expect(journey.exit_station).to eq "Waterloo"
   end
+
+  it "returns 1 when journey completed" do
+    journey = Journey.new(station_1)
+    expect(journey.fare(true)).to eq 1
+  end
+
+  it "returns 6 when journey incomplete" do
+    journey = Journey.new(station_1)
+    expect(journey.fare(false)).to eq 6
+  end 
 end

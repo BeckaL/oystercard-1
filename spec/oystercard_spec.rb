@@ -65,5 +65,12 @@ describe Oystercard do
       subject.touch_out(exit_station)
       expect(subject.journeys.length).to eq 1
     end
+
+    it "deducts 6 when two touch ins have been made" do
+      subject.top_up(10)
+      subject.touch_in(entry_station)
+      subject.touch_in(entry_station)
+      expect(subject.balance).to eq 4
+    end 
   end
 end
