@@ -35,7 +35,7 @@ class Oystercard
       @current_journey.fare(false, self)
     else
       @current_journey.add_exit_station(station)
-      deduct(MINIMUM_CHARGE)
+      @current_journey.fare(true, self)
     end
     @journeys << @current_journey
     @current_journey = nil
