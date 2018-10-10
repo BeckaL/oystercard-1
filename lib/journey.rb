@@ -1,4 +1,4 @@
-require 'oystercard'
+# require 'oystercard'
 
 class Journey
 
@@ -16,11 +16,13 @@ attr_reader :entry_station, :entry_zone, :exit_station, :exit_zone
     @exit_zone = station.zone
   end
 
-  def fare(complete = true)
+  def fare(complete = true, oystercard)
     if complete
-      Oystercard::MINIMUM_CHARGE
+      fare = Oystercard::MINIMUM_CHARGE
     else
-      MAX_PENALTY
+      fare = MAX_PENALTY
     end
+    oystercard.deduct(fare)
+    return fare
   end
 end

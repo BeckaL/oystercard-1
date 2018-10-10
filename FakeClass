@@ -1,0 +1,5 @@
+class FakeClass
+
+MIN = 1
+
+end

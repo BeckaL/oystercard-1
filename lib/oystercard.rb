@@ -23,20 +23,26 @@ class Oystercard
     raise "not enough money" if @balance < MINIMUM_CHARGE
     @entry_station = station
     if !@current_journey.nil?
-      @current_journey.fare(false)
+      @current_journey.fare(false, self)
+      @journeys << @current_journey
     end
     @current_journey = Journey.new(station)
   end
 
   def touch_out(station)
-    @current_journey.add_exit_station(station)
-    deduct(MINIMUM_CHARGE)
+    if @current_journey.nil?
+      @current_journey = Journey.new(station)
+      @current_journey.fare(false, self)
+    else
+      @current_journey.add_exit_station(station)
+      deduct(MINIMUM_CHARGE)
+    end
     @journeys << @current_journey
     @current_journey = nil
   end
 
   def in_journey?
-    true if @current_journey != nil
+    @current_journey != nil
   end
 
   def deduct(amount)

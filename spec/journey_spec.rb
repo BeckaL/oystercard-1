@@ -21,11 +21,13 @@ describe Journey do
 
   it "returns 1 when journey completed" do
     journey = Journey.new(station_1)
-    expect(journey.fare(true)).to eq 1
+    allow(oyster).to receive(:deduct).with(1)
+    expect(journey.fare(true, oyster)).to eq 1
   end
 
   it "returns 6 when journey incomplete" do
     journey = Journey.new(station_1)
-    expect(journey.fare(false)).to eq 6
-  end 
+    allow(oyster).to receive(:deduct).with(6)
+    expect(journey.fare(false, oyster)).to eq 6
+  end
 end
