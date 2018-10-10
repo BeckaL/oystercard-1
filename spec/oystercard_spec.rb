@@ -17,8 +17,8 @@ describe Oystercard do
   end
 
   describe "journey methods" do
-    let(:entry_station) {double (:station)}
-    let(:exit_station) {double (:station)}
+    let(:entry_station) {double :station, name: "Aldgate East", zone: 1}
+    let(:exit_station) {double :station, name: "Waterloo", zone: 1}
 
     it "is initially not in journey" do
       expect(subject).not_to be_in_journey
