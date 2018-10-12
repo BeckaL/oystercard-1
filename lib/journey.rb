@@ -6,23 +6,25 @@ MAX_PENALTY = 6
 
 attr_reader :entry_station, :entry_zone, :exit_station, :exit_zone
 
-  def initialize(entry_station)
-    @entry_station = entry_station.name
-    @entry_zone = entry_station.zone
+  def initialize(card)
+    @card = card
   end
 
-  def add_exit_station(station)
-    @exit_station = station.name
-    @exit_zone = station.zone
+  def get_journey(complete, journey_hash)
+    @entry_station = journey_hash[:entry].name
+    @entry_zone = journey_hash[:entry].zone
+    @exit_station = journey_hash[:exit].name
+    @exit_zone = journey_hash[:exit].zone
+    fare(complete)
   end
 
-  def fare(complete = true, oystercard)
+  def fare(complete = true)
     if complete
       fare = Oystercard::MINIMUM_CHARGE
     else
       fare = MAX_PENALTY
     end
-    oystercard.deduct(fare)
+    @card.deduct(fare)
     return fare
   end
 end
