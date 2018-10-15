@@ -10,34 +10,27 @@ class JourneyLog
   end
 
   def start(station)
-    if @current_journey[:entry_station].nil?
-      entry_zone = station.zone
-      @current_journey[:entry_station] = station.name
-    else
-      @journeys << @current_journey
-      @current_journey[:entry_station] = station.name
-      incomplete_journey
-    end
+    return @current_journey[:entry_station] = station if @current_journey[:entry_station].nil?
+    @journeys << @current_journey
+    charge = reset_journey_and_return_fare(false)
+    @current_journey[:entry_station] = station
+    return charge
   end
 
   def finish(station)
-    @exit_zone = station.zone
-    @current_journey[:exit_station] = station.name
+    @current_journey[:exit_station] = station
     @journeys << @current_journey
-    if @current_journey[:entry_station].nil?
-      @current_journey = {entry_station: nil, exit_station: nil}
-      incomplete_journey
-    else
-      @current_journey = {entry_station: nil, exit_station: nil}
-      complete_journey
-    end
+    @current_journey[:entry_station].nil? ? complete = false : complete = true
+    reset_journey_and_return_fare(complete)
   end
 
-  def incomplete_journey(journey = Journey.new)
-    journey.fare(false)
+  private
+
+  def reset_journey_and_return_fare(complete, journey = Journey)
+    my_journey = journey.new
+    charge = my_journey.fare(@current_journey[:entry_station], @current_journey[:exit_station], complete)
+    @current_journey = {entry_station: nil, exit_station: nil}
+    return charge
   end
 
-  def complete_journey(journey = Journey.new)
-    journey.fare(true)
-  end
 end
