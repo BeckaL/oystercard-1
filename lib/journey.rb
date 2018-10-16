@@ -3,28 +3,16 @@
 class Journey
 
 MAX_PENALTY = 6
+MINIMUM_CHARGE = 1
 
-attr_reader :entry_station, :entry_zone, :exit_station, :exit_zone
-
-  def initialize(card)
-    @card = card
+  def fare(entry_station, exit_station, complete = true)
+    return MAX_PENALTY if !complete
+    zones_travelled = (entry_station.zone - exit_station.zone).abs
+    fares =  {0 => 1,
+              1 => 2,
+              2 => 3,
+              3 => 4}
+    return fares[zones_travelled]
   end
 
-  def get_journey(complete, journey_hash)
-    @entry_station = journey_hash[:entry].name
-    @entry_zone = journey_hash[:entry].zone
-    @exit_station = journey_hash[:exit].name
-    @exit_zone = journey_hash[:exit].zone
-    fare(complete)
-  end
-
-  def fare(complete = true)
-    if complete
-      fare = Oystercard::MINIMUM_CHARGE
-    else
-      fare = MAX_PENALTY
-    end
-    @card.deduct(fare)
-    return fare
-  end
 end
